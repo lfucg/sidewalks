@@ -1,0 +1,130 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.btn-space{
+  margin-right: 5px;
+}
+
+.navbar-static-top {
+  margin-bottom: 0px;
+}
+
+.title {
+  font-weight: 700;
+  margin-top: 15px;
+  color: #34495e;
+}
+
+.subtitle {
+  margin-top: 0px;
+  color: #3498db;
+}
+
+.blue-title {
+  color: #16a085;
+}
+
+.white {
+  color: #FFF;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.search-area {
+  background-color: #3498DB;
+}
+
+#map-canvas { 
+  height: 350px; 
+}
+
+.btn-responsive {
+  white-space: normal;
+  width: 100%;
+  margin-bottom: 15px;    
+}
+
+.footer-text {margin-top: 1.2em;}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.pointer { cursor: pointer; }
+
+.typeahead-demo .custom-popup-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background-color: #34495e;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .message {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    color: #868686;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .no-bullets{
+  list-style-type: none;
+  margin: 1.2em;
+  padding: 0px;
+  } 
+
+.in-progress{
+  background-color: #2ecc71;
+  padding: .3em;
+  border-radius: 5px 5px 0px 0px;
+  color: #FFF;
+  margin: 10px 0px 0px 0px
+}
+.not-started{
+  background-color: #e67e22;
+  padding: .3em;
+  border-radius: 5px 5px 0px 0px;
+  color: #FFF;
+  margin: 10px 0px 0px 0px
+}
+.complete{
+  background-color: #3498db;
+  padding: .3em;
+  border-radius: 5px 5px 0px 0px;
+  color: #FFF;
+  margin: 10px 0px 0px 0px
+}
+
+.phase-details {
+  margin: 0px;
+  padding: .3em;
+  border-color: #999;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.editor {
+  border: none;
+  background-color: #EEEEEE;
+  border-radius: 5px;
+  margin: 3px;
+  padding: 3px;
+}

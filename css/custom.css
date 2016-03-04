@@ -15,6 +15,14 @@ body {
   margin-bottom: 0px;
 }
 
+.text-lex {
+  color: #0057a8;
+}
+
+.btn-lex {
+  background-color: #0057a8;
+}
+
 .title {
   font-weight: 700;
   margin-top: 15px;

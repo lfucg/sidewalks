@@ -119,7 +119,7 @@ app.get('/api/v1/request/:confirmationId', function(req, res) {
             client.query({
                 text: 'UPDATE requests SET confirmation_status=\'Confirmed\' WHERE confirmation_id = $1',
                 values: [
-                req.params.confirmation_id
+                req.params.confirmationId
                 ]
             }
                 ,function(err, result) {

@@ -24,6 +24,8 @@ var https_redirect = function(req, res, next) {
 
 app.use(https_redirect);
 
+app.enable('trust proxy')
+
 app.use(bodyParser.json({
     extended: false
 }));
@@ -55,7 +57,8 @@ app.get('/api/v1/project-street', function(req, res) {
     res.json({
         "Response" : "Success",
         "Result" : req.ip,
-        "Result2" : req.connection.remoteAddress
+        "Result2" : req.ips,
+        "Result3" : req.connection.remoteAddress
     })
 })
 

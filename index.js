@@ -2,10 +2,25 @@
 var express = require('express');
 var pg = require('pg');
 var bodyParser = require('body-parser');
+var helmet = require('helmet')
 
 var app = express();
 
-app.use(express.static('public'));
+app.use(helmet())
+
+var https_redirect = function(req, res, next) {
+    if (process.env.NODE_ENV === 'production') {
+        if (req.headers['x-forwarded-proto'] != 'https') {
+            return res.redirect('https://' + req.headers.host + req.url);
+        } else {
+            return next();
+        }
+    } else {
+        return next();
+    }
+};
+
+app.use(https_redirect);
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -19,63 +34,46 @@ app.use(function(req, res, next) {
     next();
 });
 
-//API Endpoints
 
-//New Project and Phase
-app.post('/api/v1/submit', function(req, res) {
-    var input = {
-        "project-name": req.body.project_name,
-        "lat": req.body.lat,
-        "lng": req.body.lng,
-        "RFP-number": req.body.RFP_number,
-        "project-description": req.body.project_description,
-        "project-manager": req.body.project_manager,
-        "department": req.body.department,
-        "division": req.body.division,
-        "districts": req.body.districts,
-        "contractor": req.body.contractor,
-        "start-date": req.body.start_date,
-        "estimated-completion": req.body.estimated_completion,
-        "estimated-budget": req.body.estimated_budget,
-        "work-complete": req.body.work_complete,
-        "budget-spent": req.body.budget_spent,
-        "notes": req.body.notes,
-        "submitted-by": req.body.submitted_by
-    }
-    var response = {};
-    if (req.query.key === process.env.apiKey) {
-        response = {
-            "response": "success",
-            "summary": [{
-                "records": "length"
-            }],
-            "data": []
-        };
-    } else {
-        response = {
-            "response": "Access Denied"
-        };
-    }
-    res.json(response);
+//Street List
+app.get('/api/v1/streets', function(req, res) {
+    res.json({
+        "Response" : "Success",
+        "Result" : "Records..."
+    })
 })
 
-app.get('/api/v1/browse', function(req, res) {
-    var response = {};
-    if (req.query.key === process.env.apiKey) {
-        response = {
-            "response": "success",
-            "summary": [{
-                "records": "length"
-            }],
-            "data": []
-        };
-    } else {
-        response = {
-            "response": "Access Denied"
-        };
-    }
-    res.json(response);
-});
+//Search Requests by Street
+app.get('/api/v1/project-street', function(req, res) {
+    res.json({
+        "Response" : "Success",
+        "Result" : req.ip
+    })
+})
+
+//Browse Requests
+app.get('/api/v1/requests', function(req, res) {
+    res.json({
+        "Response" : "Success",
+        "Result" : "Records..."
+    })
+})
+
+//Add Request POST
+app.post('/api/v1/project', function(req, res) {
+    res.json({
+        "Response" : "Success",
+        "Result" : "Records..."
+    })
+})
+
+//Vote POST
+app.post('/api/v1/vote', function(req, res) {
+    res.json({
+        "Response" : "Success",
+        "Result" : "Records..."
+    })
+})
 
 
 //Server

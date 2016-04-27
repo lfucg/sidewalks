@@ -101,11 +101,23 @@ app.post('/api/v1/request', function(req, res) {
 })
 
 //Confirm Request
-app.post('/api/v1/request/:confirmation', function(req, res) {
-    res.json({
-        "Response" : "Success",
-        "Result" : "Records..."
-    })
+app.get('/api/v1/request/:confirmationId', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query({
+                text: 'UPDATE projects SET confirmation_status=\'Confirmed\' WHERE confirmation_id = $1',
+                values: [
+                req.params.confirmation_id
+                ]
+            }
+                ,function(err, result) {
+                    done();
+                    if (err) {
+                        res.json({"success": false,"results": err});
+                    } else {
+                        res.json({"success" : true, "results" : "Success"});
+                    }
+                });
+    });
 })
 
 //Vote

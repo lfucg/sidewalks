@@ -57,8 +57,6 @@ app.get('/api/v1/project-street', function(req, res) {
     res.json({
         "Response" : "Success",
         "Result" : req.ip,
-        "Result2" : req.ips,
-        "Result3" : req.connection.remoteAddress
     })
 })
 
@@ -79,7 +77,7 @@ app.post('/api/v1/request', function(req, res) {
                 req.body.first_name,
                 req.body.last_name, 
                 req.body.email, 
-                req.connection.remoteAddress, 
+                req.ip, 
                 req.body.street, 
                 req.body.from_street, 
                 req.body.to_street, 

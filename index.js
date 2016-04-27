@@ -24,7 +24,7 @@ var https_redirect = function(req, res, next) {
 
 app.use(https_redirect);
 
-app.use(bodyParser.urlencoded({
+app.use(bodyParser.json({
     extended: false
 }));
 
@@ -54,7 +54,8 @@ app.get('/api/v1/streets', function(req, res) {
 app.get('/api/v1/project-street', function(req, res) {
     res.json({
         "Response" : "Success",
-        "Result" : req.ip
+        "Result" : req.ip,
+        "Result2" : req.connection.remoteAddress
     })
 })
 
@@ -66,15 +67,47 @@ app.get('/api/v1/requests', function(req, res) {
     })
 })
 
-//Add Request POST
-app.post('/api/v1/project', function(req, res) {
+//Add Request
+app.post('/api/v1/request', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query({
+                text: 'INSERT INTO requests (first_name, last_name, email, request_ip, street, from_street, to_street, sides, connections, ped_traffic, safety, comments, confirmation_id) value ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING street',
+                values: [
+                req.body.first_name,
+                req.body.last_name, 
+                req.body.email, 
+                req.connection.remoteAddress, 
+                req.body.street, 
+                req.body.from_street, 
+                req.body.to_street, 
+                req.body.sides, 
+                req.body.connections, 
+                req.body.ped_traffic, 
+                req.body.safety, 
+                req.body.comments,
+                uuid.v4()
+                ]
+            }
+                ,function(err, result) {
+                    done();
+                    if (err) {
+                        res.json({"success": false,"results": err});
+                    } else {
+                        res.json({"success" : true, "results" : result.rows});
+                    }
+                });
+    });
+})
+
+//Confirm Request
+app.post('/api/v1/request/:confirmation', function(req, res) {
     res.json({
         "Response" : "Success",
         "Result" : "Records..."
     })
 })
 
-//Vote POST
+//Vote
 app.post('/api/v1/vote', function(req, res) {
     res.json({
         "Response" : "Success",
@@ -82,8 +115,15 @@ app.post('/api/v1/vote', function(req, res) {
     })
 })
 
+app.post('/api/v1/vote/:confirmation', function(req, res) {
+    res.json({
+        "Response" : "Success",
+        "Result" : "Records..."
+    })
+})
 
-//Vote POST
+
+//Feedback
 app.post('/api/v1/feedback', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query(
@@ -99,13 +139,15 @@ app.post('/api/v1/feedback', function(req, res) {
     });
 })
 
+
+
 //Email Test
 app.get('/api/v1/email-test', function(req, res) {
 sendgrid.send({
   to:       'jmholl5@gmail.com',
   from:     'jhollinger@lexingtonky.gov',
   subject:  'Please Confirm your Sidewalk Request',
-  html:     '<p>Confirmation email body here.</p><a href="http://www.lexingtonky.gov">Link</a>'
+  html:     '<p>Thanks for submitting a sidewalk request for Southland Dr.</p> To confirm your request, please click<a href="http://www.lexingtonky.gov">here</a>'
 }, function(err, json) {
   if (err) { return console.error(err); }
   else res.json({"success" : true});

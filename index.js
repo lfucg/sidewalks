@@ -103,12 +103,12 @@ app.post('/api/v1/feedback', function(req, res) {
 app.get('/api/v1/email-test', function(req, res) {
 sendgrid.send({
   to:       'jmholl5@gmail.com',
-  from:     'jmholl5@gmail.com',
+  from:     'no-reply@gmail.com',
   subject:  'Please Confirm your Sidewalk Request',
-  text:     'Confirmation email body here. <a href="http://www.lexingtonky.gov">Link</a>'
+  text:     'Confirmation email body here'
 }, function(err, json) {
   if (err) { return console.error(err); }
-  console.log(json);
+  else res.json({"success" : true});
 });
 })
 

@@ -17,39 +17,81 @@ var stServices = angular.module('stServices', []);
 sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
   function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-      $urlRouterProvider.otherwise('/error');
+      $urlRouterProvider.otherwise('/home');
       
       $stateProvider.
-      /*Form*/
       state('home', {
-        url: '',
-        templateUrl: 'templates/submitRequest.html',
-        controller: 'submitRequest'
+        url: '/home',
+        templateUrl: 'templates/home.html',
+        controller: 'home'
       }).
       state('submit', {
-        url: '/submit',
-        templateUrl: 'templates/submitRequest.html',
-        controller: 'submitRequest'
+        url: '/submit/:street',
+        templateUrl: 'templates/submit.html',
+        controller: 'submit'
       }).
-    /*List*/
       state('browse', {
         url: '/requests',
-        templateUrl: 'templates/viewRequests.html',
-        controller: 'viewRequests'
+        templateUrl: 'templates/browse.html',
+        controller: 'browse'
+      }).
+      state('vote', {
+        url: '/vote/:requestId',
+        templateUrl: 'templates/vote.html',
+        controller: 'vote'
+      }).
+      state('thanks', {
+        url: '/thanks/:requestId',
+        templateUrl: 'templates/thanks.html',
+        controller: 'thanks'
+      }).
+      state('contact', {
+        url: '/contact',
+        templateUrl: 'templates/contact.html',
+        controller: 'contact'
       });
 
   }]);
 
 /*--------------Controllers--------------*/
 
-stControllers.controller('projectList', ['$scope', '$location', 'getData',
-  function ($scope, $location, getData) {
+stControllers.controller('submit', ['$scope', '$location', '$stateParams',
+  function ($scope, $location, $stateParams) {
+
+    $scope.existing = true
+
+    $scope.formData = {
+      "street" : $stateParams.street
+    }
 
   }]);
 
-/* Project List */
-stControllers.controller('projectList', ['$scope', '$location', 'getData',
-  function ($scope, $location, getData) {
+stControllers.controller('browse', ['$scope', '$location',
+  function ($scope, $location) {
+
+  }]);
+
+stControllers.controller('home', ['$scope', '$location',
+  function ($scope, $location) {
+
+  $scope.submit = function() { 
+  $location.path('/submit/' + $scope.street)
+  }
+
+  }]);
+
+stControllers.controller('thanks', ['$scope', '$location',
+  function ($scope, $location) {
+
+  }]);
+
+stControllers.controller('vote', ['$scope', '$location',
+  function ($scope, $location) {
+
+  }]);
+
+stControllers.controller('contact', ['$scope', '$location',
+  function ($scope, $location) {
 
   }]);
 

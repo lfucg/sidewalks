@@ -1,33 +1,56 @@
 <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Submit a Sidewalk Request</h1>
-        <p>The City of Lexington is collecting information from citizens about where we lack sidewalks. If you have know of a section of road that you believe needs sidewalks, please fill out the form below.</p>
-      </div>
-      <form>
+<div ng-show="existing">
+  <h1 class="text-lex bold">There are already some requests on {{formData.street}}!</h1>
+  <h4>We found some existing requests on {{formData.street}}. Click the thumbs up to add your support to one of the projects below.</h4>
+  <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Date</th>
+          <th>Street</th>
+          <th>From</th>
+          <th>To</th>  
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><button class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></button></td>
+          <td>4/26/2016</td>
+          <td>Southland Dr</td>
+          <td>Nicholasville Rd</td>
+          <td>Rosemont Garden</td>  
+          <td>Request Received</td>
+        </tr>
+      </tbody>
+      </table>
 
-  <h1 class="text-lex bold">Request Information</h1>
-  <p>Tell us a little about the sidewalk section you are requesting.</p>
-  <div class="form-group col-md-4">
-    <label>Street</label>
-    <select class="form-control">
-      <option>Southland Dr</option>
-    </select>
+  <button class="btn btn-lg btn-info" ng-click="existing=false">No thanks, I have a different project to submit </button>
+
+</div>
+
+<div ng-hide="existing">
+<form>
+  <h1 class="text-lex bold">Tell us a little about {{formData.street}}</h1>
+  <div class="col-sm-12">
+    <h4>What intersections are the sidewalks needed between on {{formData.street}}? Make sure the two intersections cover the whole area that needs sidewalks.</h4>
   </div>
-
-  <div class="form-group col-md-4">
+  <div class="form-group col-md-6">
     <label>From</label>
     <select class="form-control">
-      <option>Eastway Dr</option>
+      <option>Nicholasville Rd</option>
     </select>
   </div>
 
-  <div class="form-group col-md-4">
+  <div class="form-group col-md-6">
     <label>To</label>
     <select class="form-control">
       <option>Rosemont Garden</option>
     </select>
   </div>
-
+  <div class="col-sm-12">
+    <h4>Tell us a little more about your request and why {{formData.street}} needs sidewalks.</h4>
+  </div>
   <div class="form-group col-md-6">
     <label>Are sidewalks needed on one or both sides of the street?</label>
     <select class="form-control">
@@ -65,8 +88,10 @@
     <label>Is there anything else we should consider when evaluating this project?</label>
     <textarea class="form-control"></textarea>
   </div>
-  <h1 class="text-lex bold">Contact Information</h1>
-  <p>This section is not required, but it will allow us to contact you with any questions or updates. We won't share your information.</p>
+  <h1 class="text-lex bold">Tell us about you </h1>
+  <div class="col-sm-12">
+    <h4>We will send you an email to verify your request. We won't share your contact information.</h4>
+  </div>
   <div class="form-group col-md-4">
     <label>First Name</label>
     <input type="text" class="form-control">
@@ -86,3 +111,4 @@
     <button class="btn btn-lg btn-success btn-responsive">Submit</button>
   </div>
 </form>
+</div>

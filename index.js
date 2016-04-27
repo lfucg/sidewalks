@@ -117,7 +117,7 @@ app.post('/api/v1/request', function(req, res) {
 app.get('/api/v1/request/:confirmationId', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
-                text: 'UPDATE projects SET confirmation_status=\'Confirmed\' WHERE confirmation_id = $1',
+                text: 'UPDATE requests SET confirmation_status=\'Confirmed\' WHERE confirmation_id = $1',
                 values: [
                 req.params.confirmation_id
                 ]

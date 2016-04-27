@@ -72,7 +72,7 @@ app.get('/api/v1/requests', function(req, res) {
 app.post('/api/v1/request', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
-                text: 'INSERT INTO requests (first_name, last_name, email, request_ip, street, from_street, to_street, sides, connections, ped_traffic, safety, comments, confirmation_id) value ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING street',
+                text: 'INSERT INTO requests (first_name, last_name, email, request_ip, street, from_street, to_street, sides, connections, ped_traffic, safety, comments, confirmation_id) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING street;',
                 values: [
                 req.body.first_name,
                 req.body.last_name, 

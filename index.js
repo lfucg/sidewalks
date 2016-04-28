@@ -98,8 +98,13 @@ app.get('/api/v1/vote-check/:requestId/:email', function(req, res) {
                         res.json({"success": false,"results": err});
                     } else {
 
-                        if (result.rows.len === 0) {res.json({"success" : true, "vote_allowed" : TRUE})}
-                        else {res.json({"success" : true, "vote_allowed" : FALSE})}
+                        if (result.rows.len === 0) {
+                            var obj = {"success" : true, "vote_allowed" : true}
+                        }
+                        else {
+                            var obj = {"success" : true, "vote_allowed" : false}
+                        }
+                        res.json(obj)
                     }
                 });
     });

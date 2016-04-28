@@ -56,7 +56,7 @@ app.get('/api/v1/streets', function(req, res) {
 app.get('/api/v1/requests/street/:street', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
-                text : 'SELECT request_id, timestamp, street, from_street, to_street, sides, status FROM requests WHERE confirmation_status = TRUE AND street = $1 ORDER BY timestamp DESC;',
+                text : 'SELECT * FROM request_votes WHERE street = $1 ORDER BY timestamp DESC;',
                 values : [req.params.street]
             },function(err, result) {
                     done();
@@ -72,7 +72,7 @@ app.get('/api/v1/requests/street/:street', function(req, res) {
 //Browse Requests
 app.get('/api/v1/requests', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            client.query('SELECT request_id, timestamp, street, from_street, to_street, sides, status FROM requests WHERE confirmation_status = TRUE ORDER BY timestamp DESC;',function(err, result) {
+            client.query('SELECT * FROM request_votes ORDER By timestamp DESC;',function(err, result) {
                     done();
                     if (err) {
                         res.json({"success": false,"results": err});
@@ -161,7 +161,7 @@ app.post('/api/v1/vote', function(req, res) {
                           to:       result.rows[0].email,
                           from:     'jhollinger@lexingtonky.gov',
                           fromname : 'Lexington Planning Preservation and Development',
-                          subject:  'Please Confirm your Sidewalk Request',
+                          subject:  'Please Confirm your Sidewalk Project Vote',
                           html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for adding your support to a sidewalk project.</p> To confirm your support, please <a href="https://sidewalk-tracker.herokuapp.com/vote-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
                           '<p>If you have any feedback on the app, please visit our <a href="https://jmhollinger.github.io/sidewalks/#/contact">feedback page</a>.</p><p>Thanks,</p><p><strong>Jonathan Hollinger</strong><br>City of Lexington<br>Department of Planning, Preservation, and Development</p>'
                         }, function(err, json) {

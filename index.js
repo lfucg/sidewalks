@@ -132,7 +132,7 @@ app.post('/api/v1/request', function(req, res) {
     });
 })
 
-
+//Vote
 app.post('/api/v1/vote', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({

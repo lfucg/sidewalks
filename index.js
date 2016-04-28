@@ -98,7 +98,7 @@ app.get('/api/v1/vote-check/:requestId/:email', function(req, res) {
                         res.json({"success": false,"results": err});
                     } else {
 
-                        if (result.rows.len === 0) {
+                        if (result.rows.length === 0) {
                             var obj = {"success" : true, "vote_allowed" : true}
                         }
                         else {

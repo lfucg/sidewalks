@@ -117,7 +117,7 @@ app.post('/api/v1/request', function(req, res) {
                         sendgrid.send({
                           to:       result.rows[0].email,
                           from:     'jhollinger@lexingtonky.gov',
-                          fromname : 'Lexington Planning Preservation and Development'
+                          fromname : 'Lexington Planning Preservation and Development',
                           subject:  'Please Confirm your Sidewalk Request',
                           html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for submitting a sidewalk request for ' + result.rows[0].street + '</p> To confirm your request, please <a href="https://sidewalk-tracker.herokuapp.com/request-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
                           '<p>If you have any feedback on the app, please visit our <a href="">feedback page</a></p><p>Thanks again,</p><p>Jonathan Hollinger<br>City of Lexington<br>Department of Planning, Preservation, and Development</p>'

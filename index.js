@@ -56,7 +56,7 @@ app.get('/api/v1/streets', function(req, res) {
 app.get('/api/v1/requests/street/:street', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
-                text : 'SELECT timestamp, street, from_street, to_street, sides, status FROM requests WHERE street = $1 ORDER BY timestamp DESC;',
+                text : 'SELECT request_id, timestamp, street, from_street, to_street, sides, status FROM requests WHERE confirmation_status = TRUE AND street = $1 ORDER BY timestamp DESC;',
                 values : [req.params.street]
             },function(err, result) {
                     done();
@@ -72,7 +72,7 @@ app.get('/api/v1/requests/street/:street', function(req, res) {
 //Browse Requests
 app.get('/api/v1/requests', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            client.query('SELECT timestamp, street, from_street, to_street, sides, status FROM requests ORDER BY timestamp DESC;',function(err, result) {
+            client.query('SELECT request_id, timestamp, street, from_street, to_street, sides, status FROM requests WHERE confirmation_status = TRUE ORDER BY timestamp DESC;',function(err, result) {
                     done();
                     if (err) {
                         res.json({"success": false,"results": err});
@@ -119,8 +119,8 @@ app.post('/api/v1/request', function(req, res) {
                           from:     'jhollinger@lexingtonky.gov',
                           fromname : 'Lexington Planning Preservation and Development',
                           subject:  'Please Confirm your Sidewalk Request',
-                          html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for submitting a sidewalk request for ' + result.rows[0].street + '</p> To confirm your request, please <a href="https://sidewalk-tracker.herokuapp.com/request-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
-                          '<p>If you have any feedback on the app, please visit our <a href="">feedback page</a></p><p>Thanks again,</p><p>Jonathan Hollinger<br>City of Lexington<br>Department of Planning, Preservation, and Development</p>'
+                          html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for submitting a sidewalk request for ' + result.rows[0].street + '.</p> To confirm your request, please <a href="https://sidewalk-tracker.herokuapp.com/request-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
+                          '<p>If you have any feedback on the app, please visit our <a href="https://jmhollinger.github.io/sidewalks/#/contact">feedback page</a></p><p>Thanks again,</p><p><strong>Jonathan Hollinger</strong><br>City of Lexington<br>Department of Planning, Preservation, and Development</p>'
                         }, function(err, json) {
                           if (err) { return console.error(err); }
                           else console.log("email sent")
@@ -134,7 +134,45 @@ app.post('/api/v1/request', function(req, res) {
 
 
 app.post('/api/v1/vote', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query({
+                text: 'INSERT INTO votes' +
+                ' (request_id, first_name, last_name, email, vote_ip, comments, confirmation_id)' + 
+                ' values ($1, $2, $3, $4, $5, $6, $7) RETURNING first_name, email, confirmation_id;',
+                values: [
+                rew.body.request_id,
+                req.body.first_name,
+                req.body.last_name, 
+                req.body.email, 
+                req.ip, 
+                req.body.comments,
+                uuid.v4()
+                ]
+            }
+                ,function(err, result) {
+                    done();
+                    if (err) {
+                        
+                        res.json({"success": false,"results": err});
+                    
+                    } else {
+                        
+                        sendgrid.send({
+                          to:       result.rows[0].email,
+                          from:     'jhollinger@lexingtonky.gov',
+                          fromname : 'Lexington Planning Preservation and Development',
+                          subject:  'Please Confirm your Sidewalk Request',
+                          html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for voting for a .</p> To confirm your request, please <a href="https://sidewalk-tracker.herokuapp.com/request-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
+                          '<p>If you have any feedback on the app, please visit our <a href="https://jmhollinger.github.io/sidewalks/#/contact">feedback page</a></p><p>Thanks again,</p><p><strong>Jonathan Hollinger</strong><br>City of Lexington<br>Department of Planning, Preservation, and Development</p>'
+                        }, function(err, json) {
+                          if (err) { return console.error(err); }
+                          else console.log("email sent")
+                        });
 
+                        res.json({"success" : true});
+                    }
+                });
+    });
 
 })
 
@@ -160,7 +198,7 @@ app.get('/request-confirmation/:confirmationId', function(req, res) {
 })
 
 //Confirm Vote
-app.post('/vote-confirmation/:confirmationId', function(req, res) {
+app.get('/vote-confirmation/:confirmationId', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
                 text: 'UPDATE votes SET confirmation_status= TRUE WHERE confirmation_id = $1',
@@ -183,7 +221,7 @@ app.post('/vote-confirmation/:confirmationId', function(req, res) {
 app.post('/api/v1/feedback', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
-                text : 'INSERT INTO feedback (ip_adddress, name, email, message) values ($1, $2, $3, $4)', 
+                text : 'INSERT INTO feedback (ip_address, name, email, message) values ($1, $2, $3, $4)', 
                 values : [
                 req.ip,
                 req.body.name,
@@ -200,19 +238,6 @@ app.post('/api/v1/feedback', function(req, res) {
                     }
                 });
     });
-})
-
-//Email Test
-app.get('/api/v1/email-test', function(req, res) {
-sendgrid.send({
-  to:       'jmholl5@gmail.com',
-  from:     'jhollinger@lexingtonky.gov',
-  subject:  'Please Confirm your Sidewalk Request',
-  html:     '<p>Thanks for submitting a sidewalk request for Southland Dr.</p> To confirm your request, please click<a href="http://www.lexingtonky.gov">here</a>'
-}, function(err, json) {
-  if (err) { return console.error(err); }
-  else res.json({"success" : true});
-});
 })
 
 //Server

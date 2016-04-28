@@ -140,7 +140,7 @@ app.post('/api/v1/vote', function(req, res) {
                 ' (request_id, first_name, last_name, email, vote_ip, comments, confirmation_id)' + 
                 ' values ($1, $2, $3, $4, $5, $6, $7) RETURNING first_name, email, confirmation_id;',
                 values: [
-                rew.body.request_id,
+                req.body.request_id,
                 req.body.first_name,
                 req.body.last_name, 
                 req.body.email, 

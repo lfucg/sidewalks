@@ -89,7 +89,7 @@ app.post('/api/v1/request', function(req, res) {
             client.query({
                 text: 'INSERT INTO requests' +
                 ' (first_name, last_name, email, request_ip, street, from_street, to_street, sides, connections, ped_traffic, safety, comments, confirmation_id)' + 
-                ' values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING first_name, street, email, confirmation_id;'
+                ' values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING first_name, street, email, confirmation_id;',
                 values: [
                 req.body.first_name,
                 req.body.last_name, 

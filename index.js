@@ -162,7 +162,7 @@ app.post('/api/v1/vote', function(req, res) {
                           from:     'jhollinger@lexingtonky.gov',
                           fromname : 'Lexington Planning Preservation and Development',
                           subject:  'Please Confirm your Sidewalk Request',
-                          html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for voting for a .</p> To confirm your request, please <a href="https://sidewalk-tracker.herokuapp.com/request-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
+                          html:     '<p>Hi ' + result.rows[0].first_name + ',</p><p>Thanks for adding your support to a sidewalk project.</p> To confirm your support, please <a href="https://sidewalk-tracker.herokuapp.com/request-confirmation/' + result.rows[0].confirmation_id + '">click here</a>.' +
                           '<p>If you have any feedback on the app, please visit our <a href="https://jmhollinger.github.io/sidewalks/#/contact">feedback page</a></p><p>Thanks again,</p><p><strong>Jonathan Hollinger</strong><br>City of Lexington<br>Department of Planning, Preservation, and Development</p>'
                         }, function(err, json) {
                           if (err) { return console.error(err); }

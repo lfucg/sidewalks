@@ -83,6 +83,28 @@ app.get('/api/v1/requests', function(req, res) {
     });
 })
 
+//Check Requests
+app.get('/api/v1/vote-check/:requestId/:email', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query({
+                text: 'SELECT request_id, email FROM votes WHERE request_id = $1 AND email = $2;',
+                values: [
+                req.params.requestId, 
+                req.params.email
+                ]
+            },function(err, result) {
+                    done();
+                    if (err) {
+                        res.json({"success": false,"results": err});
+                    } else {
+
+                        if (result.rows.len === 0) {res.json({"success" : true, "vote_allowed" : TRUE})}
+                        else {res.json({"success" : true, "vote_allowed" : FALSE})}
+                    }
+                });
+    });
+})
+
 //Add Request
 app.post('/api/v1/request', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {

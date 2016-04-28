@@ -1,27 +1,36 @@
 <!-- Main component for a primary marketing message or call to action -->
-      <div class="col-sm-12">
-      <h1 class="text-lex bold">Add My Support for Sidewalks on {{requestData.street}}</h1>
-        <form>
-			<div class="form-group col-md-4">
+      <div ng-show="voteCheck" class="col-sm-12">
+      <h1 class="text-lex bold">Add My Support</h1>
+      <h4>{{request.street}} from {{request.from_street}} to {{request.to_street}}</h4>
+        <form name="voteForm" novalidate>
+			<div class="form-group col-md-4" ng-class="{'has-error' : voteForm.first_name.$invalid && !voteForm.first_name.$pristine}" >
 			    <label>First Name</label>
-			    <input type="text" class="form-control">
+			    <input name="first_name" ng-model="vote.first_name" type="text" class="form-control" required>
+			    <p ng-show="voteForm.first_name.$invalid && !voteForm.first_name.$pristine" class="help-block">Please enter your first name.</p>
 			  </div>
 
-			  <div class="form-group col-md-4">
+			  <div class="form-group col-md-4" ng-class="{'has-error' : voteForm.last_name.$invalid && !voteForm.last_name.$pristine}">
 			    <label>Last Name</label>
-			    <input type="text" class="form-control">
+			    <input name="last_name" ng-model="vote.last_name"type=" text" class="form-control" required>
+			    <p ng-show="voteForm.last_name.$invalid && !voteForm.last_name.$pristine" class="help-block">Please enter your last name.</p>
 			  </div>
 
-			  <div class="form-group col-md-4">
+			  <div class="form-group col-md-4" ng-class="{'has-error' : voteForm.email.$invalid && !voteForm.email.$pristine}">
 			    <label>Email</label>
-			    <input type="text" class="form-control">
+			    <input name="email" ng-model="vote.email" type="email" class="form-control" ng-change="voteAllowed()" required>
+			    <p ng-show="voteForm.email.$invalid && !voteForm.email.$pristine" class="help-block">Please enter a valid email address.</p>
 			  </div>
 			  <div class="form-group col-md-12">
     <label>Is there you want us to know about this project?</label>
-    <textarea class="form-control"></textarea>
+    <textarea name="comments" ng-model="vote.comments" class="form-control"></textarea>
   </div>
   <div class="form-group col-md-12">
-  <button class="btn btn-lg btn-success">Add my Support</button>
+  <button class="btn btn-lg btn-success" ng-disabled="voteForm.$invalid" ng-click="submit()">Add my Support</button>
   </div>
         </form>
       </div>
+   <div ng-hide="voteCheck" class="col-sm-12">
+    <h1 class="text-lex bold">Looks like you already voted...</h1>
+  	<h4 >You can only vote for a project once, and it looks like you already voted for this project.</h4>
+  	<h4><a class="btn btn-lg btn-info" ui-sref="browse">Browse other requests</a></h4>
+  </div>

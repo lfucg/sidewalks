@@ -66,8 +66,12 @@ stControllers.controller('submit', ['$scope', '$location', '$stateParams',
 
   }]);
 
-stControllers.controller('browse', ['$scope', '$location',
-  function ($scope, $location) {
+stControllers.controller('browse', ['$scope', '$location', 'dataTools',
+  function ($scope, $location, dataTools) {
+
+  dataTools.requests().then(function(result) {
+      $scope.requests = result.data.results
+  })  
 
   }]);
 
@@ -85,8 +89,27 @@ stControllers.controller('thanks', ['$scope', '$location',
 
   }]);
 
-stControllers.controller('vote', ['$scope', '$location',
-  function ($scope, $location) {
+stControllers.controller('vote', ['$scope', '$location','dataTools', '$stateParams',
+  function ($scope, $location, dataTools, $stateParams) {
+
+  $scope.vote = {
+  "request_id" : $stateParams.requestId
+  }
+
+  $scope.voteCheck = true
+
+  $scope.voteAllowed = function() {
+  dataTools.voteCheck($stateParams.requestId,$scope.vote.email).then(function(result){
+  $scope.voteCheck = result.data.vote_allowed
+  console.log(result.data.vote_allowed)
+  })
+  } 
+
+  $scope.submit = function() {
+  dataTools.vote($scope.vote).then(function(result){
+  $location.path('/thanks/1') 
+  })
+  }  
 
   }]);
 
@@ -133,3 +156,36 @@ sidewalkTracker.filter('percent', function () {
   return per.toFixed(decimals) + '%'
   }
   })
+
+/*--------------Services--------------*/
+
+stServices.factory('dataTools', ['$http', function($http){
+  return {
+    streets: function(){
+      return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/streets')
+    },
+    searchStreet: function(street){
+      return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/requests/street/' + street)
+    },
+    requests: function(){
+      return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/requests')
+    },
+    voteCheck: function(id, email){
+      return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/vote-check/' + id + '/' + email)
+    },
+    vote: function(formData){
+      return $http({
+                    method: "post",
+                    url: 'https://sidewalk-tracker.herokuapp.com/api/v1/vote',
+                    data: formData
+                })
+    },
+    request: function(formData){
+      return $http({
+                    method: "post",
+                    url: 'https://sidewalk-tracker.herokuapp.com/api/v1/vote"',
+                    data: formData
+                })
+    },
+
+}}]);

@@ -1,8 +1,8 @@
 <!-- Main component for a primary marketing message or call to action -->
       <div class="col-sm-12">
       <h1 class="text-lex bold">Submit a Sidewalk Request<h1>
-        <form>
-        <h2>I want sidewalks on <input class="street-home" type="text" ng-model="street">. <button class="btn btn-lg btn-success" ng-click="submit()">Next</button></h2>
+        <form name="streetForm">
+        <h2>I want sidewalks on <input class="street-home" type="text" name= "street" ng-model="street" required>. <button class="btn btn-lg btn-success" ng-click="submit()" ng-disabled="streetForm.$invalid">Next</button></h2>
         </form>
       </div>
       <div class="col-sm-12">

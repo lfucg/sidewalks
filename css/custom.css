@@ -98,45 +98,6 @@ body {
   padding: 0px;
   } 
 
-.in-progress{
-  background-color: #2ecc71;
-  padding: .3em;
-  border-radius: 5px 5px 0px 0px;
-  color: #FFF;
-  margin: 10px 0px 0px 0px
-}
-.not-started{
-  background-color: #e67e22;
-  padding: .3em;
-  border-radius: 5px 5px 0px 0px;
-  color: #FFF;
-  margin: 10px 0px 0px 0px
-}
-.complete{
-  background-color: #3498db;
-  padding: .3em;
-  border-radius: 5px 5px 0px 0px;
-  color: #FFF;
-  margin: 10px 0px 0px 0px
-}
-
-.phase-details {
-  margin: 0px;
-  padding: .3em;
-  border-color: #999;
-  border-width: 0px 1px 1px 1px;
-  border-style: solid;
-  border-radius: 0px 0px 5px 5px;
-}
-
-.editor {
-  border: none;
-  background-color: #EEEEEE;
-  border-radius: 5px;
-  margin: 3px;
-  padding: 3px;
-}
-
 .street-home {
   border-color: #999;
   border-width: 0px 0px 3px 0px;

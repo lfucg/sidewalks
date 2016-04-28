@@ -4,7 +4,7 @@
         <h4>Browse currently submitted sidewalks sections below. Click the thumbs up to enter your name and email to add your support to the project.</h4>
       </div>
       <div class="col-sm-12 form-group">
-      <input class="form-control" placeholder="Search for a project...">
+      <input class="form-control" ng-model="keyword" placeholder="Search for a project...">
       </div>
       <table class="table table-striped">
       <thead>
@@ -16,27 +16,19 @@
           <th>To</th>  
           <th>One/Both Sides</th>
           <th>Status</th>
+          <th>Votes</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><button class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></button></td>
-          <td>4/26/2016</td>
-          <td>Southland Dr</td>
-          <td>Nicholasville Rd</td>
-          <td>Rosemont Garden</td>  
-          <td>Both</td>
-          <td>Funded</td>
+        <tr ng-repeat="x in requests | filter : keyword">
+          <td><a ui-sref="vote({requestId: x.request_id})" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></a</td>
+          <td>{{x.timestamp | date : 'short'}}</td>
+          <td>{{x.street}}</td>
+          <td>{{x.from_street}}</td>
+          <td>{{x.to_street}}</td>  
+          <td>{{x.sides}}</td>
+          <td>{{x.status}}</td>
+          <td>{{x.votes}}</td>
         </tr>
-        <tr>
-          <td><button class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></button></td>
-          <td>4/26/2016</td>
-          <td>Jersey St</td>
-          <td>Maxwell St</td>
-          <td>Winslow St</td>  
-          <td>Both</td>
-          <td>Project Ranked</td>
-        </tr>
-
       </tbody>
       </table>

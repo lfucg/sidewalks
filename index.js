@@ -134,8 +134,8 @@ app.post('/api/v1/request', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
                 text: 'INSERT INTO requests' +
-                ' (first_name, last_name, email, request_ip, street, from_street, to_street, sides, connections, ped_traffic, safety, comments, confirmation_id)' + 
-                ' values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING first_name, street, email, confirmation_id;',
+                ' (first_name, last_name, email, request_ip, street, from_street, to_street, sides, connections, ped_traffic, safety, comments)' + 
+                ' values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING first_name, street, email, confirmation_id;',
                 values: [
                 req.body.first_name,
                 req.body.last_name, 
@@ -148,8 +148,7 @@ app.post('/api/v1/request', function(req, res) {
                 req.body.connections, 
                 req.body.ped_traffic, 
                 req.body.safety, 
-                req.body.comments,
-                uuid.v4()
+                req.body.comments
                 ]
             }
                 ,function(err, result) {
@@ -183,16 +182,15 @@ app.post('/api/v1/vote', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             client.query({
                 text: 'INSERT INTO votes' +
-                ' (request_id, first_name, last_name, email, vote_ip, comments, confirmation_id)' + 
-                ' values ($1, $2, $3, $4, $5, $6, $7) RETURNING first_name, email, confirmation_id;',
+                ' (request_id, first_name, last_name, email, vote_ip, comments)' + 
+                ' values ($1, $2, $3, $4, $5, $6) RETURNING first_name, email, confirmation_id;',
                 values: [
                 req.body.request_id,
                 req.body.first_name,
                 req.body.last_name, 
                 req.body.email, 
                 req.ip, 
-                req.body.comments,
-                uuid.v4()
+                req.body.comments
                 ]
             }
                 ,function(err, result) {

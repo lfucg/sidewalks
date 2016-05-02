@@ -64,6 +64,12 @@ stControllers.controller('submit', ['$scope', '$location', '$stateParams',
       "street" : $stateParams.street
     }
 
+    $scope.submit = function() {
+  dataTools.vote($scope.vote).then(function(result){
+  $location.path('/thanks/1') 
+  })
+  }
+
   }]);
 
 stControllers.controller('browse', ['$scope', '$location', 'dataTools',

@@ -278,7 +278,7 @@ app.post('/api/v1/feedback', function(req, res) {
                     if (err) {
                         res.json({"success": false,"results": err});
                     } else {
-                        
+                        res.json({"success": true,"results": ""});
                         sendgrid.send({
                           to:       'jhollinger@lexingtonky.gov',
                           from:     req.body.email,

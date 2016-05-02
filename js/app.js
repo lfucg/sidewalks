@@ -49,7 +49,17 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
         url: '/contact',
         templateUrl: 'templates/contact.html',
         controller: 'contact'
-      });
+      }).
+      state('thanksConfirmation', {
+        url: '/confirmation-thanks',
+        templateUrl: 'templates/thanks-confirmation.html',
+        controller: 'thanksConfirmation'
+      }.
+      state('thanksFeedback', {
+        url: '/feeback-thanks',
+        templateUrl: 'templates/thanks-feedback.html',
+        controller: 'thanksFeedback'
+      }));
 
   }]);
 
@@ -91,6 +101,16 @@ stControllers.controller('home', ['$scope', '$location',
   }]);
 
 stControllers.controller('thanks', ['$scope', '$location',
+  function ($scope, $location) {
+
+  }]);
+
+stControllers.controller('thanksConfirmation', ['$scope', '$location',
+  function ($scope, $location) {
+
+  }]);
+
+stControllers.controller('thanksFeedback', ['$scope', '$location',
   function ($scope, $location) {
 
   }]);

@@ -31,7 +31,7 @@
 </div>
 
 <div ng-hide="existing">
-    <form name="requestForm" ng-submit="submit()" novalidate>
+    <form name="requestForm" novalidate>
         <h1 class="text-lex bold">Tell us a little about {{formData.street}}</h1>
                 <div class="form-group">
             <h4>What intersections are the sidewalks needed between on {{formData.street}}? Make sure the two intersections cover the whole area that needs sidewalks.</h4> </div>
@@ -56,14 +56,14 @@
         <div class="row">
         <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.sides.$invalid && !requestForm.sides.$pristine}">
             <label>Are sidewalks needed on one or both sides of the street?</label>
-            <select name="sides" ng-model="formData.sides" class="form-control" ng-options="item.name for item in sidesOptions track by item.value" required>
+            <select name="sides" ng-model="formData.sides" class="form-control" ng-options="item.value as item.name for item in sidesOptions" required>
             <option value="">Select an option</option>
             </select>
             <p ng-show="requestForm.sides.$invalid && !requestForm.sides.$pristine && requestForm.sides.$dirty" class="help-block">Please tell us if one or both sides need sidewalks.</p>
         </div>
         <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.connections.$invalid && !requestForm.connections.$pristine}">
             <label>Would completion of this project connect existing sidewalks?</label>
-            <select name="connections" ng-model="formData.connections" ng-options="item.name for item in yesnoOptions track by item.value" class="form-control" required>
+            <select name="connections" ng-model="formData.connections" ng-options="item.value as item.name for item in yesnoOptions" class="form-control" required>
             <option value="">Select an option</option>
             </select>
             <p ng-show="requestForm.connections.$invalid && !requestForm.connections.$pristine && requestForm.connections.$dirty" class="help-block">Please tell us if this connects existing sidewalks.</p>
@@ -73,7 +73,7 @@
         <div class="row">
         <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.ped_traffic.$invalid && !requestForm.ped_traffic.$pristine}">
             <label>How would you describe the pedestrian traffic in this area?</label>
-            <select name="ped_traffic" ng-model="formData.ped_traffic" ng-options="item.name for item in pedOptions track by item.value" class="form-control" required>
+            <select name="ped_traffic" ng-model="formData.ped_traffic" ng-options="item.value as item.name for item in pedOptions" class="form-control" required>
             <option value="">Select an option</option>
             </select>
             <p ng-show="requestForm.ped_traffic.$invalid && !requestForm.ped_traffic.$pristine && requestForm.ped_traffic.$dirty" class="help-block">Please tell us the level of pedestrian traffic.</p>
@@ -81,7 +81,7 @@
 
         <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.safety.$invalid && !requestForm.safety.$pristine && requestForm.safety.$dirty}">
             <label>Does the lack of sidewalk cause safety issues?</label>
-            <select name="safety" ng-model="formData.safety" ng-options="item.name for item in yesnoOptions track by item.value" class="form-control" required>
+            <select name="safety" ng-model="formData.safety" ng-options="item.value as item.name for item in yesnoOptions track by item.value" class="form-control" required>
             <option value="">Select an option</option>
             </select>
             <p ng-show="requestForm.safety.$invalid && !requestForm.safety.$pristine && requestForm.safety.$dirty" class="help-block">Please let us know if you think there are safety issues.</p>

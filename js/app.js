@@ -45,6 +45,11 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
         templateUrl: 'templates/thanks.html',
         controller: 'thanks'
       }).
+      state('error', {
+        url: '/error',
+        templateUrl: 'templates/error.html',
+        controller: 'error'
+      }).
       state('contact', {
         url: '/contact',
         templateUrl: 'templates/contact.html',
@@ -106,7 +111,12 @@ stControllers.controller('submit', ['$scope', '$location', '$stateParams', 'data
 
     $scope.submit = function() {
   dataTools.request($scope.formData).then(function(result){
-  $location.path('/thanks') 
+   if (result.data.success === true) {
+  $location.path('/thanks')
+  }
+  else {
+  $location.path('/error')
+  }
   })
   }
 
@@ -128,7 +138,7 @@ stControllers.controller('home', ['$scope', '$location', 'dataTools',
       $scope.streets = result.data.results
   })
 
-  $scope.submit = function() { 
+  $scope.submit = function(){ 
   $location.path('/submit/' + $scope.street)
   }
 
@@ -140,14 +150,13 @@ stControllers.controller('thanks', ['$scope', '$location',
   }]);
 
 stControllers.controller('thanksConfirmation', ['$scope', '$location',
-  function ($scope, $location) {
-
-  }]);
+  function ($scope, $location) {}]);
 
 stControllers.controller('thanksFeedback', ['$scope', '$location',
-  function ($scope, $location) {
+  function ($scope, $location) {}]);
 
-  }]);
+stControllers.controller('error', ['$scope', '$location',
+  function ($scope, $location) {}]);
 
 stControllers.controller('vote', ['$scope', '$location','dataTools', '$stateParams',
   function ($scope, $location, dataTools, $stateParams) {
@@ -170,7 +179,12 @@ stControllers.controller('vote', ['$scope', '$location','dataTools', '$statePara
 
   $scope.submit = function() {
   dataTools.vote($scope.vote).then(function(result){
-  $location.path('/thanks') 
+  if (result.data.success === true) {
+  $location.path('/thanks')
+  }
+  else {
+  $location.path('/error')
+  } 
   })
   }  
 
@@ -183,7 +197,12 @@ stControllers.controller('contact', ['$scope', '$location', 'dataTools',
 
   $scope.submit = function() {
   dataTools.feedback($scope.formData).then(function(result){
-  $location.path('/feedback-thanks') 
+   if (result.data.success === true) {
+  $location.path('/thanks')
+  }
+  else {
+  $location.path('/error')
+  }
   })
   }  
 

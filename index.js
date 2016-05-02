@@ -110,6 +110,25 @@ app.get('/api/v1/vote-check/:requestId/:email', function(req, res) {
     });
 })
 
+//Request By ID
+app.get('/api/v1/request/:requestId', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query({
+                text: 'SELECT * FROM request_votes WHERE request_id = $1;',
+                values: [
+                req.params.requestId
+                ]
+            },function(err, result) {
+                    done();
+                    if (err) {
+                        res.json({"success": false,"results": err});
+                    } else {
+                        res.json({"success" : true, "results" : result.rows});
+                    }
+                });
+    });
+})
+
 //Add Request
 app.post('/api/v1/request', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
@@ -218,7 +237,7 @@ app.get('/request-confirmation/:confirmationId', function(req, res) {
                     if (err) {
                         res.json({"success": false,"results": err});
                     } else {
-                        res.redirect('https://jmhollinger.github.io/sidewalks')
+                        res.redirect('https://jmhollinger.github.io/sidewalks/#/confirmation-thanks')
                     }
                 });
     });
@@ -238,7 +257,7 @@ app.get('/vote-confirmation/:confirmationId', function(req, res) {
                     if (err) {
                         res.json({"success": false,"results": err});
                     } else {
-                        res.redirect('https://jmhollinger.github.io/sidewalks')
+                        res.redirect('https://jmhollinger.github.io/sidewalks/#/confirmation-thanks')
                     }
                 });
     });
@@ -261,7 +280,16 @@ app.post('/api/v1/feedback', function(req, res) {
                     if (err) {
                         res.json({"success": false,"results": err});
                     } else {
-                        res.json({"success" : true});
+                        
+                        sendgrid.send({
+                          to:       'jhollinger@lexingtonky.gov',
+                          from:     req.body.email,
+                          subject:  'Sidewalk Request System Feedback',
+                          html:     '<p>Message: </p>' + req.body.message
+                        }, function(err, json) {
+                          if (err) { return console.error(err); }
+                          else console.log("email sent")
+                        });
                     }
                 });
     });

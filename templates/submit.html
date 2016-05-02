@@ -1,114 +1,121 @@
-<!-- Main component for a primary marketing message or call to action -->
 <div ng-show="existing">
-  <h1 class="text-lex bold">There are already some requests on {{formData.street}}!</h1>
-  <h4>We found some existing requests on {{formData.street}}. Click the thumbs up to add your support to one of the projects below.</h4>
-  <table class="table table-striped">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Date</th>
-          <th>Street</th>
-          <th>From</th>
-          <th>To</th>  
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><button class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></button></td>
-          <td>4/26/2016</td>
-          <td>Southland Dr</td>
-          <td>Nicholasville Rd</td>
-          <td>Rosemont Garden</td>  
-          <td>Request Received</td>
-        </tr>
-      </tbody>
-      </table>
-
-  <button class="btn btn-lg btn-info" ng-click="existing=false">No thanks, I have a different project to submit </button>
-
+    <h1 class="text-lex bold">There are already some requests on {{formData.street}}!</h1>
+    <h4>We found some existing requests on {{formData.street}}. Click the thumbs up to add your support to one of the projects below.</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Date</th>
+                <th>Street</th>
+                <th>From</th>
+                <th>To</th>
+                <th>One/Both Sides</th>
+                <th>Status</th>
+                <th>Votes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in requests">
+                <td><a ui-sref="vote({requestId: x.request_id})" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></a></td>
+                <td>{{x.timestamp | date : 'short'}}</td>
+                <td>{{x.street}}</td>
+                <td>{{x.from_street}}</td>
+                <td>{{x.to_street}}</td>
+                <td>{{x.sides}}</td>
+                <td>{{x.status}}</td>
+                <td>{{x.votes}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-lg btn-info" ng-click="existing=false">No thanks, I have a different project to submit </button>
 </div>
 
 <div ng-hide="existing">
-<form>
-  <h1 class="text-lex bold">Tell us a little about {{formData.street}}</h1>
-  <div class="col-sm-12">
-    <h4>What intersections are the sidewalks needed between on {{formData.street}}? Make sure the two intersections cover the whole area that needs sidewalks.</h4>
-  </div>
-  <div class="form-group col-md-6">
-    <label>From</label>
-    <select class="form-control">
-      <option>Nicholasville Rd</option>
-    </select>
-  </div>
+    <form name="requestForm" ng-submit="submit()" novalidate>
+        <h1 class="text-lex bold">Tell us a little about {{formData.street}}</h1>
+                <div class="form-group">
+            <h4>What intersections are the sidewalks needed between on {{formData.street}}? Make sure the two intersections cover the whole area that needs sidewalks.</h4> </div>
 
-  <div class="form-group col-md-6">
-    <label>To</label>
-    <select class="form-control">
-      <option>Rosemont Garden</option>
-    </select>
-  </div>
-  <div class="col-sm-12">
-    <h4>Tell us a little more about your request and why {{formData.street}} needs sidewalks.</h4>
-  </div>
-  <div class="form-group col-md-6">
-    <label>Are sidewalks needed on one or both sides of the street?</label>
-    <select class="form-control">
-      <option>Both Sides</option>
-      <option>One Side</option>
-    </select>
-  </div>
+        <div class="row">
+        <div class="form-group col-sm-6" ng-class="{'has-error' : requestForm.from_street.$invalid && !requestForm.from_street.$pristine}">
+            <label>From</label>
+            <input type="text" name="from_street" ng-model="formData.from_street" class="form-control" uib-typeahead="street.anno for street in streets | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-show-hint="true" typeahead-select-on-exact typeahead-select-on-blur required>
+            <p ng-show="requestForm.from_street.$invalid && !requestForm.from_street.$pristine" class="help-block">Please enter a valid street.</p>
+        </div>
+        <div class="form-group col-sm-6" ng-class="{'has-error' : requestForm.to_street.$invalid && !requestForm.to_street.$pristine}">
+            <label>To</label>
+            <input type="text" name="to_street" ng-model="formData.to_street" class="form-control" uib-typeahead="street.anno for street in streets | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-show-hint="true" typeahead-select-on-exact typeahead-select-on-blur required>
+            <p ng-show="requestForm.to_street.$invalid && !requestForm.to_street.$pristine" class="help-block">Please enter a valid street.</p>
+        </div>
+        </div>
 
-  <div class="form-group col-md-6">
-    <label>Would completion of this project connect existing sidewalks?</label>
-    <select class="form-control">
-      <option>Yes</option>
-      <option>No</option>
-    </select>
-  </div>
+        <div class="form-group">
+            <h4>Tell us a little more about your request and why {{formData.street}} needs sidewalks.</h4>
+        </div>
+        
+        <div class="row">
+        <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.sides.$invalid && !requestForm.sides.$pristine}">
+            <label>Are sidewalks needed on one or both sides of the street?</label>
+            <select name="sides" ng-model="formData.sides" class="form-control" ng-options="item.name for item in sidesOptions track by item.value" required>
+            <option value="">Select an option</option>
+            </select>
+            <p ng-show="requestForm.sides.$invalid && !requestForm.sides.$pristine && requestForm.sides.$dirty" class="help-block">Please tell us if one or both sides need sidewalks.</p>
+        </div>
+        <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.connections.$invalid && !requestForm.connections.$pristine}">
+            <label>Would completion of this project connect existing sidewalks?</label>
+            <select name="connections" ng-model="formData.connections" ng-options="item.name for item in yesnoOptions track by item.value" class="form-control" required>
+            <option value="">Select an option</option>
+            </select>
+            <p ng-show="requestForm.connections.$invalid && !requestForm.connections.$pristine && requestForm.connections.$dirty" class="help-block">Please tell us if this connects existing sidewalks.</p>
+        </div>
+        </div>
 
-  <div class="form-group col-md-6">
-    <label>How would you describe the pedestrian traffic in this area?</label>
-    <select class="form-control">
-      <option>High Traffic</option>
-      <option>Average Traffic</option>
-       <option>Low Traffic</option>
-    </select>
-  </div>
+        <div class="row">
+        <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.ped_traffic.$invalid && !requestForm.ped_traffic.$pristine}">
+            <label>How would you describe the pedestrian traffic in this area?</label>
+            <select name="ped_traffic" ng-model="formData.ped_traffic" ng-options="item.name for item in pedOptions track by item.value" class="form-control" required>
+            <option value="">Select an option</option>
+            </select>
+            <p ng-show="requestForm.ped_traffic.$invalid && !requestForm.ped_traffic.$pristine && requestForm.ped_traffic.$dirty" class="help-block">Please tell us the level of pedestrian traffic.</p>
+        </div>
 
-  <div class="form-group col-md-6">
-    <label>Does the lack of sidewalk cause safety issues?</label>
-    <select class="form-control">
-      <option>Yes</option>
-      <option>No</option>
-    </select>
-  </div>
+        <div class="form-group col-md-6" ng-class="{'has-error' : requestForm.safety.$invalid && !requestForm.safety.$pristine && requestForm.safety.$dirty}">
+            <label>Does the lack of sidewalk cause safety issues?</label>
+            <select name="safety" ng-model="formData.safety" ng-options="item.name for item in yesnoOptions track by item.value" class="form-control" required>
+            <option value="">Select an option</option>
+            </select>
+            <p ng-show="requestForm.safety.$invalid && !requestForm.safety.$pristine && requestForm.safety.$dirty" class="help-block">Please let us know if you think there are safety issues.</p>
+        </div>
+        </div>
 
-  <div class="form-group col-md-12">
-    <label>Is there anything else we should consider when evaluating this project?</label>
-    <textarea class="form-control"></textarea>
-  </div>
-  <h1 class="text-lex bold">Tell us about you </h1>
-  <div class="col-sm-12">
-    <h4>We will send you an email to verify your request. We won't share your contact information.</h4>
-  </div>
-  <div class="form-group col-md-4">
-    <label>First Name</label>
-    <input type="text" class="form-control">
-  </div>
-
-  <div class="form-group col-md-4">
-    <label>Last Name</label>
-    <input type="text" class="form-control">
-  </div>
-
-  <div class="form-group col-md-4">
-    <label>Email</label>
-    <input type="text" class="form-control">
-  </div>
-
-  <div class="form-group col-md-12">
-    <button class="btn btn-lg btn-success btn-responsive">Submit</button>
-  </div>
-</form>
+        <div class="form-group">
+            <label>Is there anything else we should consider when evaluating this project?</label>
+            <textarea name="comments" ng-model="formData.comments" class="form-control"></textarea>
+        </div>
+        <h1 class="text-lex bold">Tell us about you </h1>
+        <div class="form-group">
+            <h4>We will send you an email to verify your request. We won't share your contact information.</h4>
+        </div>
+        <div class="row">
+        <div class="form-group col-md-4" ng-class="{'has-error' : requestForm.first_name.$invalid && !requestForm.first_name.$pristine}">
+            <label>First Name</label>
+            <input name="first_name" ng-model="formData.first_name" type="text" class="form-control" required>
+            <p ng-show="requestForm.first_name.$invalid && !requestForm.first_name.$pristine" class="help-block">Please enter your first name.</p>
+        </div>
+        <div class="form-group col-md-4" ng-class="{'has-error' : requestForm.last_name.$invalid && !requestForm.last_name.$pristine}">
+            <label>Last Name</label>
+            <input name="last_name" ng-model="formData.last_name" type="text" class="form-control" required>
+            <p ng-show="requestForm.last_name.$invalid && !requestForm.last_name.$pristine" class="help-block">Please enter your last name.</p>
+        </div>
+        <div class="form-group col-md-4" ng-class="{'has-error' : requestForm.email.$invalid && !requestForm.email.$pristine}">
+            <label>Email</label>
+            <input name="email" ng-model="formData.email" type="email" class="form-control" required>
+            <p ng-show="requestForm.email.$invalid && !requestForm.email.$pristine" class="help-block">Please enter a valid email.</p>
+        </div>
+        </div>
+        <div class="form-group has-error">
+            <p ng-show="requestForm.$invalid" class="help-block">Looks like you haven't filled everything out yet, or typed in some invalid information. Please check for blank fields or errors above.</p>
+            <button class="btn btn-lg btn-success btn-responsive" ng-disabled="requestForm.$invalid" ng-click="submit()">Submit Request</button>
+        </div>
+    </form>
 </div>

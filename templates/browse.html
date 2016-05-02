@@ -1,9 +1,9 @@
 <!-- Main component for a primary marketing message or call to action -->
-      <div class="col-sm-12">
+      <div>
       <h1 class="text-lex bold">Browse Requests<h1>
-        <h4>Browse currently submitted sidewalks sections below. Click the thumbs up to enter your name and email to add your support to the project.</h4>
+        <h4>Browse currently submitted sidewalks sections below. Click the thumbs up to add your support to the project.</h4>
       </div>
-      <div class="col-sm-12 form-group">
+      <div class="form-group">
       <input class="form-control" ng-model="keyword" placeholder="Search for a project...">
       </div>
       <table class="table table-striped">
@@ -21,14 +21,14 @@
       </thead>
       <tbody>
         <tr ng-repeat="x in requests | filter : keyword">
-          <td><a ui-sref="vote({requestId: x.request_id})" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></a</td>
+          <td><a ui-sref="vote({requestId: x.request_id})" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i></a></td>
           <td>{{x.timestamp | date : 'short'}}</td>
           <td>{{x.street}}</td>
           <td>{{x.from_street}}</td>
           <td>{{x.to_street}}</td>  
           <td>{{x.sides}}</td>
           <td>{{x.status}}</td>
-          <td>{{x.votes}}</td>
+          <td><span class="badge">{{x.votes}}</span></td>
         </tr>
       </tbody>
       </table>

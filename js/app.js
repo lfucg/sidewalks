@@ -41,7 +41,7 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
         controller: 'vote'
       }).
       state('thanks', {
-        url: '/thanks/:requestId',
+        url: '/thanks',
         templateUrl: 'templates/thanks.html',
         controller: 'thanks'
       }).
@@ -54,29 +54,59 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
         url: '/confirmation-thanks',
         templateUrl: 'templates/thanks-confirmation.html',
         controller: 'thanksConfirmation'
-      }.
+      }).
       state('thanksFeedback', {
-        url: '/feeback-thanks',
+        url: '/feedback-thanks',
         templateUrl: 'templates/thanks-feedback.html',
         controller: 'thanksFeedback'
-      }));
+      });
 
   }]);
 
 /*--------------Controllers--------------*/
 
-stControllers.controller('submit', ['$scope', '$location', '$stateParams',
-  function ($scope, $location, $stateParams) {
+stControllers.controller('submit', ['$scope', '$location', '$stateParams', 'dataTools',
+  function ($scope, $location, $stateParams, dataTools) {
 
-    $scope.existing = true
-
-    $scope.formData = {
+   $scope.formData = {
       "street" : $stateParams.street
     }
 
+    $scope.sidesOptions = [{
+    "name" : "One Side", "value" : "One"
+    },{
+    "name" : "Both Sides", "value" : "Both"
+    }]
+
+    $scope.pedOptions = [{
+    "name" : "High Traffic", "value" : "High"
+    },{
+    "name" : "Average Traffic", "value" : "Average"
+    },{
+    "name" : "Low Traffic", "value" : "Low"
+    }]
+
+    $scope.yesnoOptions = [{
+    "name" : "Yes", "value" : "Yes"
+    },{
+    "name" : "No", "value" : "No"
+    }]
+
+   dataTools.searchStreet($stateParams.street).then(function(result){
+    if (result.data.results.length === 0) {$scope.existing = false}
+    else {
+      $scope.existing = true
+      $scope.requests = result.data.results  
+    }
+  })
+
+   dataTools.streets().then(function(result) {
+      $scope.streets = result.data.results
+  })
+
     $scope.submit = function() {
-  dataTools.vote($scope.vote).then(function(result){
-  $location.path('/thanks/1') 
+  dataTools.request($scope.formData).then(function(result){
+  $location.path('/thanks') 
   })
   }
 
@@ -91,8 +121,12 @@ stControllers.controller('browse', ['$scope', '$location', 'dataTools',
 
   }]);
 
-stControllers.controller('home', ['$scope', '$location',
-  function ($scope, $location) {
+stControllers.controller('home', ['$scope', '$location', 'dataTools',
+  function ($scope, $location, dataTools) {
+
+  dataTools.streets().then(function(result) {
+      $scope.streets = result.data.results
+  })
 
   $scope.submit = function() { 
   $location.path('/submit/' + $scope.street)
@@ -118,6 +152,10 @@ stControllers.controller('thanksFeedback', ['$scope', '$location',
 stControllers.controller('vote', ['$scope', '$location','dataTools', '$stateParams',
   function ($scope, $location, dataTools, $stateParams) {
 
+  dataTools.requestByid($stateParams.requestId).then(function(result){
+      $scope.request = result.data.results[0]  
+    })
+
   $scope.vote = {
   "request_id" : $stateParams.requestId
   }
@@ -127,20 +165,27 @@ stControllers.controller('vote', ['$scope', '$location','dataTools', '$statePara
   $scope.voteAllowed = function() {
   dataTools.voteCheck($stateParams.requestId,$scope.vote.email).then(function(result){
   $scope.voteCheck = result.data.vote_allowed
-  console.log(result.data.vote_allowed)
   })
   } 
 
   $scope.submit = function() {
   dataTools.vote($scope.vote).then(function(result){
-  $location.path('/thanks/1') 
+  $location.path('/thanks') 
   })
   }  
 
   }]);
 
-stControllers.controller('contact', ['$scope', '$location',
-  function ($scope, $location) {
+stControllers.controller('contact', ['$scope', '$location', 'dataTools',
+  function ($scope, $location, dataTools) {
+
+  $scope.formData = {}
+
+  $scope.submit = function() {
+  dataTools.feedback($scope.formData).then(function(result){
+  $location.path('/feedback-thanks') 
+  })
+  }  
 
   }]);
 
@@ -196,6 +241,9 @@ stServices.factory('dataTools', ['$http', function($http){
     requests: function(){
       return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/requests')
     },
+    requestByid: function(id){
+      return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/request/' + id)
+    },
     voteCheck: function(id, email){
       return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/vote-check/' + id + '/' + email)
     },
@@ -209,9 +257,16 @@ stServices.factory('dataTools', ['$http', function($http){
     request: function(formData){
       return $http({
                     method: "post",
-                    url: 'https://sidewalk-tracker.herokuapp.com/api/v1/vote"',
+                    url: 'https://sidewalk-tracker.herokuapp.com/api/v1/request',
                     data: formData
                 })
     },
+    feedback: function(formData){
+      return $http({
+                    method: "post",
+                    url: 'https://sidewalk-tracker.herokuapp.com/api/v1/feedback',
+                    data: formData
+                })
+    }
 
 }}]);

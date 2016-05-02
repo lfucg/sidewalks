@@ -1,10 +1,12 @@
 <!-- Main component for a primary marketing message or call to action -->
-      <div class="col-sm-12">
+      <div>
       <h1 class="text-lex bold">Submit a Sidewalk Request<h1>
         <form name="streetForm">
-        <h2>I want sidewalks on <input class="street-home" type="text" name= "street" ng-model="street" required>. <button class="btn btn-lg btn-success" ng-click="submit()" ng-disabled="streetForm.$invalid">Next</button></h2>
-        </form>
+        <h2>I want sidewalks on <input type="text" name="street" ng-model="street" uib-typeahead="street.anno for street in streets | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-select-on-exact typeahead-select-on-blur typeahead-on-select = "submit()" class="street-home" required>. 
+        <button class="btn btn-lg btn-success" ng-click="submit()" ng-disabled="streetForm.$invalid">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+        </h2>
+       </form>
       </div>
-      <div class="col-sm-12">
-        <h4>The City of Lexington is trying to identify all missing sidewalk sections around the city. Please enter a street above to get started on your request. If you want to add your support to existing requests, <a ui-sref="browse">browse requests here</a>.</h4>
+      <div>
+        <h4>The City of Lexington is trying to identify all missing sidewalk sections around the city. Please enter a street above to get started on your request. If you want to add your support to existing requests, please <a ui-sref="browse">browse requests here</a>.</h4>
       </div>

@@ -235,7 +235,7 @@ app.get('/request-confirmation/:confirmationId', function(req, res) {
                     if (err) {
                         res.json({"success": false,"results": err});
                     } else {
-                        res.redirect('https://jmhollinger.github.io/sidewalks/#/confirmation-thanks')
+                        res.redirect('https://lfucg.github.io/sidewalks/#/confirmation-thanks')
                     }
                 });
     });
@@ -255,7 +255,7 @@ app.get('/vote-confirmation/:confirmationId', function(req, res) {
                     if (err) {
                         res.json({"success": false,"results": err});
                     } else {
-                        res.redirect('https://jmhollinger.github.io/sidewalks/#/confirmation-thanks')
+                        res.redirect('https://lfucg.github.io/sidewalks/#/confirmation-thanks')
                     }
                 });
     });

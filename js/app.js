@@ -198,7 +198,7 @@ stControllers.controller('contact', ['$scope', '$location', 'dataTools',
   $scope.submit = function() {
   dataTools.feedback($scope.formData).then(function(result){
    if (result.data.success === true) {
-  $location.path('/thanks')
+  $location.path('/feedback-thanks')
   }
   else {
   $location.path('/error')

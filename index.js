@@ -125,10 +125,10 @@ app.get('/api/v1/street-check/:street', function(req, res) {
                     } else {
 
                         if (result.rows.length === 0) {
-                            var obj = {"success" : true, "vote_allowed" : true}
+                            var obj = {"success" : true, "valid_street" : false}
                         }
                         else {
-                            var obj = {"success" : true, "vote_allowed" : false}
+                            var obj = {"success" : true, "vote_allowed" : true}
                         }
                         res.json(obj)
                     }

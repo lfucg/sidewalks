@@ -73,6 +73,13 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
 stControllers.controller('submit', ['$scope', '$location', '$stateParams', 'dataTools',
   function ($scope, $location, $stateParams, dataTools) {
 
+    dataTools.streetCheck($stateParams.street).then(function(result){
+      if (result.data.valid_street === false) {
+      $location.path('/error')  
+      }
+      else {}
+    })
+
    $scope.formData = {
       "street" : $stateParams.street
     }
@@ -265,6 +272,9 @@ stServices.factory('dataTools', ['$http', function($http){
     },
     voteCheck: function(id, email){
       return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/vote-check/' + id + '/' + email)
+    },
+    streetCheck: function(street){
+      return $http.get('https://sidewalk-tracker.herokuapp.com/api/v1/street-check/' + street)
     },
     vote: function(formData){
       return $http({

@@ -110,6 +110,32 @@ app.get('/api/v1/vote-check/:requestId/:email', function(req, res) {
     });
 })
 
+//Check Street Name
+app.get('/api/v1/street-check/:street', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query({
+                text: 'SELECT sid FROM streets WHERE anno = $1;',
+                values: [
+                req.params.street
+                ]
+            },function(err, result) {
+                    done();
+                    if (err) {
+                        res.json({"success": false,"results": err});
+                    } else {
+
+                        if (result.rows.length === 0) {
+                            var obj = {"success" : true, "vote_allowed" : true}
+                        }
+                        else {
+                            var obj = {"success" : true, "vote_allowed" : false}
+                        }
+                        res.json(obj)
+                    }
+                });
+    });
+})
+
 //Request By ID
 app.get('/api/v1/request/:requestId', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {

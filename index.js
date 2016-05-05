@@ -309,7 +309,7 @@ app.post('/api/v1/feedback', function(req, res) {
                           to:       'jhollinger@lexingtonky.gov',
                           from:     req.body.email,
                           subject:  'Sidewalk Request System Feedback',
-                          html:     '<p>Message: </p>' + req.body.message
+                          html:     '<p>Name: </p><p>' + req.body.name + '</p><p>Message: </p><p>' + req.body.message + '</p>'
                         }, function(err, json) {
                           if (err) { return console.error(err); }
                           else console.log("email sent")

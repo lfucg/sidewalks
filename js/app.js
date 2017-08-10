@@ -24,7 +24,7 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
         url: '/home',
         templateUrl: 'templates/home.html',
         controller: 'home'
-      }).
+      })/*.
       state('submit', {
         url: '/submit/:street',
         templateUrl: 'templates/submit.html',
@@ -64,7 +64,7 @@ sidewalkTracker.config(['$stateProvider', '$urlRouterProvider', '$locationProvid
         url: '/feedback-thanks',
         templateUrl: 'templates/thanks-feedback.html',
         controller: 'thanksFeedback'
-      });
+      });*/
 
   }]);
 
